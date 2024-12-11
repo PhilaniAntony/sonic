@@ -10,7 +10,6 @@ public class GetAirlinesTest extends BaseTest {
     public void retrieveAirlines() {
         getAllAirlines().
                 then()
-                .log().all()
                 .assertThat().
                 spec(getAllAirlineExpectedResponseSpec());
     }

@@ -18,19 +18,19 @@ public class BaseTest {
                 .contentType(ContentType.JSON)
                 .body(createAirlinePayload(name, country).toString())
                 .post()
-                .then()
-                .extract()
-                .response();
+                .then().extract().response();
     }
 
     public JSONObject createAirlinePayload(String name, String country) {
         JSONObject airline = new JSONObject();
+
         airline.put("name", name);
         airline.put("country", country);
         airline.put("slogan", "Let's Go Places Together");
         airline.put("head_quarters", "Cape Town");
         airline.put("website", "https://www.niceairline.com");
         airline.put("established", "1994");
+
         return airline;
     }
 
@@ -53,8 +53,7 @@ public class BaseTest {
                 contentType(ContentType.JSON).
                 when().
                 get().
-                then().
-                extract().response();
+                then().extract().response();
     }
 
     public ResponseSpecification getAllAirlineExpectedResponseSpec() {

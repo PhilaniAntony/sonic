@@ -15,9 +15,8 @@ public class CreateAirlineTest extends BaseTest {
     public void createAirline() {
         String name = AIRLINE_NAME + DataUtil.generateRandomLetters(6, true, false);
 
-        createAirline("Starline", "South Africa")
+        createAirline(name, COUNTRY)
                 .then()
-                .log().all()
                 .assertThat()
                 .spec(createAirlineExpectedResponseSpec()).
                 body("name", is(name)).
