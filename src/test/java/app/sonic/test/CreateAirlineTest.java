@@ -17,6 +17,7 @@ public class CreateAirlineTest extends BaseTest {
 
         createAirline(name, COUNTRY)
                 .then()
+                .log().all()
                 .assertThat()
                 .spec(createAirlineExpectedResponseSpec()).
                 body("name", is(name)).

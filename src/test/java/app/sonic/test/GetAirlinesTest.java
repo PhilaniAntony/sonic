@@ -8,9 +8,10 @@ public class GetAirlinesTest extends BaseTest {
 
     @Description("As an API client, I should be able to retrieve all the airlines available.")
     public void retrieveAirlines() {
-        getAllAirlines().
-                then()
-                .assertThat().
-                spec(getAllAirlineExpectedResponseSpec());
+        getAllAirlines()
+                .then()
+                .log().all()
+                .assertThat()
+                .spec(getAllAirlineExpectedResponseSpec());
     }
 }
