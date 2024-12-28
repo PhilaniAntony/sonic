@@ -1,25 +1,32 @@
 package app.sonic.test;
 
-import io.restassured.RestAssured;
+import app.sonic.Sonic;
+import app.sonic.test.utils.CustomConfig;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 import org.json.simple.JSONObject;
 
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
-
 public class BaseTest {
 
-    public void setupTestEnvironment() {
-        RestAssured.baseURI = "https://api.instantwebtools.net";
-        RestAssured.basePath = "/v1/airlines";
+    CustomConfig customConfig;
+    private Sonic sonic;
+
+    public void setup() {
+        sonic = new Sonic();
+        customConfig = new CustomConfig(sonic.getConfig().getProperties());
+        baseURI = sonic.getConfig().getUri();
+        basePath = sonic.getConfig().getPath();
+        defaultParser = Parser.JSON;
     }
 
     public Response createAirline(String name, String country) {
-        setupTestEnvironment();
+        setup();
         return given()
                 .contentType(ContentType.JSON)
                 .body(createAirlinePayload(name, country).toString())
@@ -54,7 +61,7 @@ public class BaseTest {
     }
 
     public Response getAllAirlines() {
-        setupTestEnvironment();
+        setup();
         return given().
                 contentType(ContentType.JSON).
                 when().
