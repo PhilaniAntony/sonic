@@ -1,4 +1,4 @@
-package app.sonic.test.utils;
+package app.sonic.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

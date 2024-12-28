@@ -1,4 +1,4 @@
-package app.sonic.test.utils;
+package app.sonic.utils;
 
 
 import java.util.Properties;
