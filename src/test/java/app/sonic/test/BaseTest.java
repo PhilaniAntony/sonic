@@ -1,7 +1,7 @@
 package app.sonic.test;
 
 import app.sonic.Sonic;
-import app.sonic.test.utils.CustomConfig;
+import app.sonic.utils.CustomConfig;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;

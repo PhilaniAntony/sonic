@@ -1,4 +1,4 @@
-package app.sonic.test;
+package app.sonic;
 
 public class TestData {
     public static final String AIRLINE_NAME = "StarLiner_";

@@ -1,13 +1,19 @@
 package app.sonic.test;
 
-import app.sonic.test.utils.DataUtil;
-import jdk.jfr.Description;
+import app.sonic.utils.DataUtil;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 
-import static app.sonic.test.TestData.AIRLINE_NAME;
-import static app.sonic.test.TestData.COUNTRY;
+import static app.sonic.TestData.AIRLINE_NAME;
+import static app.sonic.TestData.COUNTRY;
 import static org.hamcrest.Matchers.is;
 
+@Epic("Manage Airlines")
+@Feature("Add Create And Get Endpoints")
+@Story("Add 'Create' and 'Get' Endpoints")
 @Test
 public class SampleTest extends BaseTest {
 
