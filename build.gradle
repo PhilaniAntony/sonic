@@ -1,30 +1,56 @@
+buildscript {
+    ext {
+        testngVersion = '7.10.2'
+        restAssuredVersion = '5.5.0'
+        restAssuredJsonPathVersion = '5.5.0'
+        jacksonVersion = '2.18.2'
+        hamcrestVersion = '3.0'
+        apacheCommonVersion = '3.17.0'
+        simpleJsonVersion = '1.1.1'
+        allureTestngVersion = '2.29.1'
+        allureJavaCommonsVersion = '2.29.1'
+        lombokVersion = '1.18.36'
+        apacheLog4j2Version = '2.24.3'
+        allureTestFilterversion = '2.29.1'
+    }
+}
+
 plugins {
     id 'java'
 }
-
-group = 'app.sonic'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
+group = 'app.sonic'
+version = '1.0-SNAPSHOT'
+
 dependencies {
-    testImplementation 'org.testng:testng:7.10.2'
-    testImplementation 'io.rest-assured:rest-assured:5.5.0'
-    testImplementation 'io.rest-assured:json-path:5.5.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    testImplementation 'org.hamcrest:hamcrest:3.0'
-    implementation 'com.github.javafaker:javafaker:1.0.2'
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    implementation 'io.qameta.allure:allure-testng:2.29.1'
-    implementation 'io.qameta.allure:allure-java-commons:2.29.1'
-    implementation 'org.projectlombok:lombok:1.18.36'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
-    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0'
-    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.20.0'
-    runtimeOnly 'io.qameta.allure:allure-test-filter:2.29.1'
+    testImplementation "org.testng:testng:${testngVersion}"
+    testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+    testImplementation "io.rest-assured:json-path:${restAssuredJsonPathVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    implementation "org.apache.commons:commons-lang3:${apacheCommonVersion}"
+    implementation "com.googlecode.json-simple:json-simple:${simpleJsonVersion}"
+    implementation "io.qameta.allure:allure-testng:${allureTestngVersion}"
+    implementation "io.qameta.allure:allure-java-commons:${allureJavaCommonsVersion}"
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j2-impl:${apacheLog4j2Version}"
+    runtimeOnly "org.apache.logging.log4j:log4j-core:${apacheLog4j2Version}"
+    runtimeOnly "io.qameta.allure:allure-test-filter:${allureTestFilterversion}"
+}
+
+Properties semver = new Properties()
+semver.load(new FileInputStream(file("semver.properties") as File))
+
+Properties properties = new Properties()
+if(file("sonic.properties").exists()) {
+    file("sonic.properties").withInputStream {properties.load(it)}
+} else {
+    println("sonic properties file does not exist")
 }
 
 test {
