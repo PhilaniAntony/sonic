@@ -31,3 +31,4 @@ out/
 sonic.properties
 /allure-results/
 /allure-report/
+/generated_test/
