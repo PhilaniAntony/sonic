@@ -1,0 +1,43 @@
+trigger: none
+
+pool:
+  name: 'Your-Agent-Pool'
+  demands: java
+
+stages:
+  - stage: Regression
+    displayName: "Regression Test Suite"
+    jobs:
+      - job: Regression_Job
+        displayName: "Run Regression Tests"
+        container:
+          image: 'openjdk:17'
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          - task: NodeTool@0
+            displayName: "Install Node.js"
+            inputs:
+              versionSpec: "16.x"
+
+          - task: JavaToolInstaller@0
+            displayName: "Install Java"
+            inputs:
+              versionSpec: "17"
+              jdkArchitecture: "x64"
+
+          - script: |
+              gradle wrapper
+              ./gradlew clean build
+            displayName: "Build Project"
+
+          - script: |
+              ./gradlew test -PtestType=regression
+            displayName: "Run Regression Tests"
+
+          - task: PublishTestResults@2
+            displayName: "Publish Regression Test Results"
+            inputs:
+              testResultsFiles: "**/TEST-*.xml"
+              testRunTitle: "Regression Test Results"

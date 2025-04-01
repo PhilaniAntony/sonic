@@ -1,0 +1,49 @@
+schedules:
+  - cron: "0 16 * * 1-5"  # Runs at 18:00 GMT+2 Monday - Friday
+    displayName: "Nightly Regression Run"
+    branches:
+      include:
+        - develop
+    always: true
+
+pool:
+  name: 'Your-Agent-Pool'
+  demands: java
+
+stages:
+  - stage: Nightly
+    displayName: "Nightly Test Suite"
+    jobs:
+      - job: Nightly_Job
+        displayName: "Run Nightly Tests"
+        container:
+          image: 'openjdk:17'
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          - task: NodeTool@0
+            displayName: "Install Node.js"
+            inputs:
+              versionSpec: "16.x"
+
+          - task: JavaToolInstaller@0
+            displayName: "Install Java"
+            inputs:
+              versionSpec: "17"
+              jdkArchitecture: "x64"
+
+          - script: |
+              gradle wrapper
+              ./gradlew clean build
+            displayName: "Build Project"
+
+          - script: |
+              ./gradlew test -PtestType=nightly
+            displayName: "Run Nightly Tests"
+
+          - task: PublishTestResults@2
+            displayName: "Publish Nightly Test Results"
+            inputs:
+              testResultsFiles: "**/TEST-*.xml"
+              testRunTitle: "Nightly Test Results"

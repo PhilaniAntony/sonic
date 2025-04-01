@@ -1,0 +1,48 @@
+trigger:
+  branches:
+    include:
+      - develop
+      - next
+      - main
+
+pool:  
+  name: 'Your-Agent-Pool'
+  demands: java
+
+stages:
+  - stage: Build
+    displayName: "CI Build"
+    jobs:
+      - job: Build_Job
+        displayName: "Build and Test"
+        container:  
+          image: 'openjdk:17'
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          - task: NodeTool@0
+            displayName: "Install Node.js"
+            inputs:
+              versionSpec: "16.x"
+
+          - task: JavaToolInstaller@0
+            displayName: "Install Java"
+            inputs:
+              versionSpec: "17"
+              jdkArchitecture: "x64"
+
+          - script: |
+              gradle wrapper
+              ./gradlew clean build
+            displayName: "Build Project"
+
+          - script: |
+              ./gradlew test
+            displayName: "Run Tests"
+
+          - task: PublishTestResults@2
+            displayName: "Publish Test Results"
+            inputs:
+              testResultsFiles: "**/TEST-*.xml"
+              testRunTitle: "CI Build Test Results"
