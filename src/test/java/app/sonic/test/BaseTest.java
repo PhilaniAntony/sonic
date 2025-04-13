@@ -4,7 +4,6 @@ import app.sonic.Sonic;
 import io.restassured.http.Header;
 import io.restassured.parsing.Parser;
 import lombok.Getter;
-import org.testng.annotations.BeforeMethod;
 
 import java.util.Base64;
 
@@ -23,13 +22,8 @@ public class BaseTest {
         defaultParser = Parser.JSON;
     }
 
-    @BeforeMethod(alwaysRun = true)
-    public void setupEnvironment() {
-        setup();
-    }
-
     public void createToken() {
-        baseURI = "https://accounts.spotify.com/api/token";
+        baseURI = sonic.getConfig().getAuthUri();
         basePath = "";
 
         String credentials = sonic.getConfig().getClientId() + ":" + sonic.getConfig().getClientSecret();

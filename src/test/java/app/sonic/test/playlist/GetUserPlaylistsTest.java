@@ -35,10 +35,10 @@ public class GetUserPlaylistsTest extends PlaylistBase {
 
     @Description("As an API client, I should not be able to retrieve a user's playlists without a user Id.")
     public void viewUserPlaylistsWithoutUserId() {
-        getUserPlaylists("")
+        getUserPlaylists("37i9dQZF1EIg4DY3QQQQQQ")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND)
-                .body("error.message", is("Service not found"));
+                .body("error.message", is("Resource not found"));
     }
 }

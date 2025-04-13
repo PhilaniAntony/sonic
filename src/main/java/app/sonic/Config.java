@@ -8,10 +8,12 @@ import java.util.Properties;
 public class Config {
 
     private final String uri;
-    private final String path;
+    private final String playlistBasePath;
+    private final String userBasePath;
     private final String clientId;
     private final String clientSecret;
     private final String state;
+    private final String authUri;
     public String grantType;
     public String code;
     public String playlistId;
@@ -22,7 +24,8 @@ public class Config {
     Config(Properties properties) {
         this.properties = properties;
         this.uri = properties.getProperty("base.uri");
-        this.path = properties.getProperty("base.path");
+        this.playlistBasePath = properties.getProperty("playlist.base.path");
+        this.userBasePath = properties.getProperty("user.base.path");
         this.clientId = properties.getProperty("client.id");
         this.clientSecret = properties.getProperty("client.secret");
         this.state = properties.getProperty("state");
@@ -31,5 +34,6 @@ public class Config {
         this.playlistId = properties.getProperty("playlist.id");
         this.userId = properties.getProperty("user.id");
         this.refreshToken = properties.getProperty("refresh.token");
+        this.authUri = properties.getProperty("auth.uri");
     }
 }

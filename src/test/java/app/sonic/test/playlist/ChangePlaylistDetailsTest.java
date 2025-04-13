@@ -20,7 +20,8 @@ public class ChangePlaylistDetailsTest extends PlaylistBase {
     @Description("As an API client, I should be able to update a playlist details.")
     public void changePlaylistDetails() {
         updatePlaylistDetails(sonic.getConfig().getPlaylistId(),
-                createUpdatePlaylistPayload(NAME + DataUtil.generateRandomLetters(6, true, false), DESCRIPTION, false))
+                createUpdatePlaylistPayload(PLAYLIST_NAME + DataUtil.getCurrentDate("yyyyMMdd"),
+                        UPDATED_DESCRIPTION, false))
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
@@ -29,7 +30,8 @@ public class ChangePlaylistDetailsTest extends PlaylistBase {
     @Description("As an API client, I should not be able to update a playlist details using an invalid playlist Id.")
     public void changePlaylistDetailsWithInvalidPlaylistId() {
         updatePlaylistDetails(INVALID_ID,
-                createUpdatePlaylistPayload(NAME + DataUtil.generateRandomLetters(6, true, false), DESCRIPTION, false))
+                createUpdatePlaylistPayload(PLAYLIST_NAME + DataUtil.getCurrentDate("yyyyMMdd"),
+                        UPDATED_DESCRIPTION, false))
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
@@ -39,7 +41,8 @@ public class ChangePlaylistDetailsTest extends PlaylistBase {
     @Description("As an API client, I should not be able to update the details of a  playlist  using a non-existent playlist Id.")
     public void changePlaylistDetailsUsingNonExistentPlaylistId() {
         updatePlaylistDetails(NON_EXISTENT_ID,
-                createUpdatePlaylistPayload(NAME + DataUtil.generateRandomLetters(6, true, false), DESCRIPTION, false))
+                createUpdatePlaylistPayload(PLAYLIST_NAME + DataUtil.getCurrentDate("yyyyMMdd"),
+                        UPDATED_DESCRIPTION, false))
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND)

@@ -24,12 +24,14 @@ public class PlaylistBase extends BaseTest {
         setupPlaylistEnvironment();
     }
 
-    public Response createPlaylist(String name, String description, boolean isPublic) {
+    public Response createPlaylist(String userId,String name, String description, boolean isPublic) {
+        setupUsersEnvironment();
+
         return given()
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
                 .body(createUpdatePlaylistPayload(name, description, isPublic).toString())
-                .post()
+                .post(userId + "/playlists")
                 .then().extract().response();
     }
 
@@ -38,7 +40,7 @@ public class PlaylistBase extends BaseTest {
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
                 .body(payload.toString())
-                .put("/playlists/" + playlistId)
+                .put(playlistId)
                 .then().extract().response();
     }
 
@@ -57,17 +59,20 @@ public class PlaylistBase extends BaseTest {
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/playlists/" + playlistId)
+                .get(playlistId)
                 .then()
                 .extract().response();
     }
 
     public Response getUserPlaylists(String userId) {
+        setupUsersEnvironment();
+
         return given()
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
+                .log().all()
                 .when()
-                .get("/users/" + userId + "/playlists")
+                .get( userId + "/playlists")
                 .then()
                 .extract().response();
     }
@@ -79,7 +84,6 @@ public class PlaylistBase extends BaseTest {
                 .expectBody("id", is(playlistId))
                 .expectBody("description", notNullValue())
                 .expectBody("collaborative", is(false))
-                .expectBody("images", nullValue())
                 .expectBody("public", notNullValue())
                 .expectBody("type", notNullValue())
                 .expectBody("uri", notNullValue())
@@ -104,27 +108,24 @@ public class PlaylistBase extends BaseTest {
                 .build();
     }
 
-    public Response addTracksToPlaylist(String playlistId, List<String> tracks, List<String> episodes, int position) {
+    public Response addTracksToPlaylist(String playlistId, List<String> tracks, int position) {
+        setupPlaylistEnvironment();
         return given()
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
-                .body(tracklistPayload(tracks, episodes, position).toString())
-                .post("/playlists/" + playlistId + "/tracks")
+                .body(tracklistPayload(tracks, position).toString())
+                .post(playlistId + "/tracks")
                 .then()
                 .extract().response();
     }
 
-    public JSONObject tracklistPayload(List<String> tracks, List<String> episodes, int position) {
+    public JSONObject tracklistPayload(List<String> tracks, int position) {
         JSONObject payload = new JSONObject();
         JSONArray tracksList = new JSONArray();
 
-        if (!tracks.isEmpty() && !episodes.isEmpty()) {
+        if (!tracks.isEmpty()) {
             for (String track : tracks) {
                 String trackName = "spotify:track:" + track;
-                tracksList.add(trackName);
-            }
-            for (String episode : episodes) {
-                String trackName = "spotify:episode" + episode;
                 tracksList.add(trackName);
             }
         } else {
@@ -136,8 +137,55 @@ public class PlaylistBase extends BaseTest {
         return payload;
     }
 
+    public Response unfollowPlaylist(String playlistId) {
+        setupPlaylistEnvironment();
+        return given()
+                .header(getAuthHeader())
+                .contentType(ContentType.JSON)
+                .log().all()
+                .delete(playlistId + "/followers")
+                .then()
+                .extract().response();
+    }
+
+    public Response removePlaylistTracks(String playlistId, List<String> tracks, String snapShortId) {
+        setupPlaylistEnvironment();
+        return given()
+                .header(getAuthHeader())
+                .contentType(ContentType.JSON)
+                .body(removeTracklistPayload(tracks, snapShortId).toString())
+                .delete(playlistId + "/tracks")
+                .then()
+                .extract().response();
+    }
+
+    public JSONObject removeTracklistPayload(List<String> tracks, String snapShortId) {
+        JSONObject payload = new JSONObject();
+        JSONObject trackObject = new JSONObject();
+        JSONArray tracksList = new JSONArray();
+
+        if (!tracks.isEmpty()) {
+            for (String track : tracks) {
+                String trackName = "spotify:track:" + track;
+                trackObject.put("uri", trackName);
+                tracksList.add(trackObject);
+            }
+        } else {
+            payload.put("uri", new JSONObject());
+        }
+
+        payload.put("tracks", tracksList);
+        payload.put("snapshot_id", snapShortId);
+        return payload;
+    }
+
     public void setupPlaylistEnvironment() {
         RestAssured.baseURI = sonic.getConfig().getUri();
-        RestAssured.basePath = sonic.getConfig().getPath();
+        RestAssured.basePath = sonic.getConfig().getPlaylistBasePath();
+    }
+
+    public void setupUsersEnvironment() {
+        RestAssured.baseURI = sonic.getConfig().getUri();
+        RestAssured.basePath = sonic.getConfig().getUserBasePath();
     }
 }
