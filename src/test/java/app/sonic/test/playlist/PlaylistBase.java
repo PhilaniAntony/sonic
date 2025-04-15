@@ -70,7 +70,6 @@ public class PlaylistBase extends BaseTest {
         return given()
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
-                .log().all()
                 .when()
                 .get( userId + "/playlists")
                 .then()
@@ -142,7 +141,6 @@ public class PlaylistBase extends BaseTest {
         return given()
                 .header(getAuthHeader())
                 .contentType(ContentType.JSON)
-                .log().all()
                 .delete(playlistId + "/followers")
                 .then()
                 .extract().response();

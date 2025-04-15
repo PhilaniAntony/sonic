@@ -21,7 +21,6 @@ public class ViewPlaylistDetailsTest extends PlaylistBase {
     public void viewPlaylistDetails() {
         getPlaylistDetails(sonic.getConfig().getPlaylistId())
                 .then()
-                .log().all()
                 .assertThat()
                 .spec(getPlaylistDetailsExpectedResponseSpec(sonic.getConfig().getPlaylistId()));
     }

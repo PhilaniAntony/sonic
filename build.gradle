@@ -1,22 +1,30 @@
 buildscript {
     ext {
-        testngVersion = '7.10.2'
-        restAssuredVersion = '5.5.0'
-        restAssuredJsonPathVersion = '5.5.0'
-        jacksonVersion = '2.18.2'
+        testngVersion = '7.11.0'
+        restAssuredVersion = '5.5.1'
+        restAssuredJsonPathVersion = '5.5.1'
+        jacksonVersion = '2.18.3'
         hamcrestVersion = '3.0'
         apacheCommonVersion = '3.17.0'
         simpleJsonVersion = '1.1.1'
         allureTestngVersion = '2.29.1'
         allureJavaCommonsVersion = '2.29.1'
-        lombokVersion = '1.18.36'
+        lombokVersion = '1.18.38'
         apacheLog4j2Version = '2.24.3'
         allureTestFilterversion = '2.29.1'
+        dependencyCheckVersion = '12.1.0'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.owasp:dependency-check-gradle:${dependencyCheckVersion}"
     }
 }
 
 plugins {
     id 'java'
+    id 'org.owasp.dependencycheck' version '12.1.0'
 }
 
 repositories {
@@ -42,6 +50,10 @@ dependencies {
     runtimeOnly "org.apache.logging.log4j:log4j-slf4j2-impl:${apacheLog4j2Version}"
     runtimeOnly "org.apache.logging.log4j:log4j-core:${apacheLog4j2Version}"
     runtimeOnly "io.qameta.allure:allure-test-filter:${allureTestFilterversion}"
+}
+
+dependencyCheck {
+    failBuildOnCVSS = 5
 }
 
 Properties semver = new Properties()
