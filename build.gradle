@@ -1,16 +1,16 @@
 buildscript {
     ext {
         testngVersion = '7.11.0'
-        restAssuredVersion = '5.5.1'
-        restAssuredJsonPathVersion = '5.5.1'
-        jacksonVersion = '2.18.3'
+        restAssuredVersion = '5.5.5'
+        restAssuredJsonPathVersion = '5.5.5'
+        jacksonVersion = '2.19.2'
         hamcrestVersion = '3.0'
-        apacheCommonVersion = '3.17.0'
+        apacheCommonVersion = '3.18.0'
         simpleJsonVersion = '1.1.1'
         allureTestngVersion = '2.29.1'
         allureJavaCommonsVersion = '2.29.1'
         lombokVersion = '1.18.38'
-        apacheLog4j2Version = '2.24.3'
+        apacheLog4j2Version = '2.25.1'
         allureTestFilterversion = '2.29.1'
         dependencyCheckVersion = '12.1.0'
     }
